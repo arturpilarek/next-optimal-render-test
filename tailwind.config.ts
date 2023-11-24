@@ -13,8 +13,15 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      colors: {
+        'primary-blue': '#29303D'
+      },
+      minHeight: {
+        'screen-85': '85vh'
+      }
     },
   },
   plugins: [],
+  mode: process.env.NODE_ENV ? 'jit' : undefined
 }
 export default config
