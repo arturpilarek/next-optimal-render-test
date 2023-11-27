@@ -32,14 +32,17 @@ export default function FetchMethodTesting() {
             Bucket: 'bachelor-test-product-bucket',
             Key: 'product-data.json'
         };
-
         try {
             const start = performance.now();
-            const data = await s3.getObject(params).promise();
-            const end = performance.now();
-            const fetchedProducts: Product[] = JSON.parse(data.Body.toString('utf-8'));
+            const response = await s3.getObject(params).promise();
 
-            setProducts(fetchedProducts.slice(0, 1000));
+            if (response.Body) {
+                const bodyContent = response.Body.toString('utf-8');
+                const fetchedProducts: Product[] = JSON.parse(bodyContent);
+                setProducts(fetchedProducts.slice(0, 1000));
+            }
+
+            const end = performance.now();
             setStats([{ id: 1, name: 'Fetching products time', stat: `${(end - start).toFixed(2)}ms` }]);
             setLoadingStartTime(end);
         } catch (err) {
@@ -52,7 +55,7 @@ export default function FetchMethodTesting() {
     };
 
     useEffect(() => {
-        fetchProductsFromS3();
+        fetchProductsFromS3().then(() => console.log('Products fetched successfully from S3'));
     }, []);
 
     useEffect(() => {
@@ -69,7 +72,7 @@ export default function FetchMethodTesting() {
         };
 
         updateStats();
-    }, [imagesLoaded, products.length, loadingStartTime]);
+    }, [imagesLoaded, products.length, loadingStartTime, stats]);
 
     return (
         <div className="bg-white">
