@@ -44,6 +44,7 @@ export default function DesktopNavigation({pages, openState, changeOpenState}: D
                                                 <Link
                                                     key={page.name}
                                                     href={page.href}
+                                                    prefetch={false}
                                                     className="flex items-center text-sm font-medium text-white"
                                                 >
                                                     {page.name}

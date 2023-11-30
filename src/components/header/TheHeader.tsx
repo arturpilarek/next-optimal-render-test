@@ -6,7 +6,7 @@ const navigation = {
     pages: [
         { name: 'Fetch', href: '/testing/fetch' },
         { name: 'Static Generation', href: '#' },
-        { name: 'SSR', href: '#' },
+        { name: 'SSR', href: '/testing/ssr' },
         { name: 'SSR + hydration', href: '#' },
         { name: 'ISR', href: '#' },
         { name: 'Dynamic Import med CSR', href: '#' },

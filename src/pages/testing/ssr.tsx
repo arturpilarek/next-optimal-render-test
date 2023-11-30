@@ -1,5 +1,7 @@
+// pages/ssr-method.tsx
 import React, { useEffect, useState } from 'react';
 import AWS from 'aws-sdk';
+import { GetServerSideProps } from 'next';
 
 type Product = {
     ProductId: number;
@@ -21,71 +23,83 @@ type Stats = {
     stat: string;
 }
 
-export default function FetchMethodTesting() {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [stats, setStats] = useState<Stats[]>([]);
+type SSRMethodTestingProps = {
+    products: Product[];
+    serverFetchTime: string;
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+    const start = performance.now();
+
+    const s3 = new AWS.S3();
+    const params = {
+        Bucket: 'bachelor-test-product-bucket',
+        Key: 'product-data.json'
+    };
+
+    try {
+        const response = await s3.getObject(params).promise();
+
+        const end = performance.now();
+        const fetchTime = end - start;
+
+        let products: Product[] = [];
+
+        if (response.Body) {
+            const bodyContent = response.Body.toString('utf-8');
+            const fetchedProducts: Product[] = JSON.parse(bodyContent);
+            const updatedProducts = fetchedProducts.map(product => ({
+                ...product,
+                ModifiedImageURL: `${product.ImageURL}?v=${Math.floor(Math.random() * 1000)}`
+            }));
+            products = updatedProducts.slice(0, 1000);
+        }
+
+        return {
+            props: {
+                products,
+                serverFetchTime: fetchTime.toFixed(2)
+            }
+        };
+    } catch (err) {
+        console.error('Error fetching products:', err);
+        return { props: { products: [], serverFetchTime: 0 } };
+    }
+}
+
+export default function SSRMethodTesting({ products, serverFetchTime }: SSRMethodTestingProps) {
+    const [stats, setStats] = useState<Stats[]>([
+        { id: 1, name: 'Server-side fetching time', stat: `${serverFetchTime}ms` }
+    ]);
     const [imagesLoaded, setImagesLoaded] = useState<number>(0);
     const [loadingStartTime, setLoadingStartTime] = useState<number | null>(null);
-
-    // To be sure we're starting fresh on each render
-    useEffect(() => {
-        return () => {
-            setProducts([]);
-            setStats([]);
-        };
-    }, []);
-
-    const fetchProductsFromS3 = async () => {
-        const s3 = new AWS.S3();
-        const params = {
-            Bucket: 'bachelor-test-product-bucket',
-            Key: 'product-data.json'
-        };
-        try {
-            const start = performance.now();
-            const response = await s3.getObject(params).promise();
-
-            if (response.Body) {
-                const bodyContent = response.Body.toString('utf-8');
-                const fetchedProducts: Product[] = JSON.parse(bodyContent);
-                const updatedProducts = fetchedProducts.map(product => ({
-                    ...product,
-                    ModifiedImageURL: `${product.ImageURL}?v=${Math.floor(Math.random() * 1000)}`
-                }));
-                setProducts(updatedProducts.slice(0, 1000));
-            }
-
-            const end = performance.now();
-            setStats([{ id: 1, name: 'Fetching products time', stat: `${(end - start).toFixed(2)}ms` }]);
-            setLoadingStartTime(end);
-        } catch (err) {
-            console.error('Error fetching products:', err);
-        }
-    };
 
     const handleImageLoaded = () => {
         setImagesLoaded(prev =>  prev + 1);
     };
 
+    // To be sure we're starting fresh on each render
     useEffect(() => {
-        fetchProductsFromS3().then(() => console.log('Products fetched successfully from S3'));
+        return () => {
+            setStats([]);
+        };
     }, []);
 
     useEffect(() => {
-        const updateStats = () => {
-            const currentStats = stats.filter(stat => stat.id !== 2);
-            if (imagesLoaded === products.length && loadingStartTime) {
-                const loadingEndTime = performance.now();
-                const loadingTime = loadingEndTime - loadingStartTime;
-                currentStats.push({ id: 2, name: 'Images loading time', stat: `${loadingTime.toFixed(2)}ms` });
-            } else {
-                currentStats.push({ id: 2, name: 'Images Loaded', stat: `${imagesLoaded} of ${products.length}` });
-            }
-            setStats(currentStats);
-        };
-
-        updateStats();
-    }, [imagesLoaded, products.length, loadingStartTime]);
+        if (imagesLoaded === products.length && loadingStartTime) {
+            const loadingEndTime = performance.now();
+            const loadingTime = loadingEndTime - loadingStartTime;
+            setStats([
+                { id: 1, name: 'Server-side fetching time', stat: `${serverFetchTime}ms` },
+                { id: 2, name: 'Images loading time', stat: `${loadingTime.toFixed(2)}ms` }
+            ]);
+        } else {
+            setStats([
+                { id: 1, name: 'Server-side fetching time', stat: `${serverFetchTime}ms` },
+                { id: 2, name: 'Images Loaded', stat: `${imagesLoaded} of ${products.length}` }
+            ]);
+        }
+    }, [imagesLoaded, products.length, loadingStartTime, serverFetchTime]);
 
     return (
         <div className="bg-white">
@@ -125,8 +139,8 @@ export default function FetchMethodTesting() {
                                             {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img
                                                 src={product.ModifiedImageURL}
-                                                alt={product.ProductTitle}
                                                 fetchPriority='high'
+                                                alt={product.ProductTitle}
                                                 onLoad={handleImageLoaded}
                                                 className="h-full w-full object-cover object-center sm:h-full sm:w-full"
                                             />
@@ -151,5 +165,5 @@ export default function FetchMethodTesting() {
                 </main>
             </div>
         </div>
-    )
+    );
 }

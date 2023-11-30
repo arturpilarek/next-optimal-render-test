@@ -19,7 +19,7 @@ const features = [
         name: 'SSR',
         description:
             'Server-Side Rendering (SSR) behandler HTML på serveren for hver brugeranmodning. Det sikrer, at brugerne modtager opdateret indhold, men kan øge serverbelastningen og forlænge loadtider sammenlignet med statiske metoder.',
-        href: '#',
+        href: '/testing/ssr',
         icon: ArrowLongRightIcon,
     },
     {
