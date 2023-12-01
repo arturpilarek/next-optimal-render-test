@@ -1,5 +1,5 @@
 // pages/ssr-method.tsx
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import AWS from 'aws-sdk';
 import { GetServerSideProps } from 'next';
 
@@ -68,38 +68,59 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 export default function SSRMethodTesting({ products, serverFetchTime }: SSRMethodTestingProps) {
-    const [stats, setStats] = useState<Stats[]>([
-        { id: 1, name: 'Server-side fetching time', stat: `${serverFetchTime}ms` }
-    ]);
-    const [imagesLoaded, setImagesLoaded] = useState<number>(0);
+    const imagesLoaded = useRef(0);
     const [loadingStartTime, setLoadingStartTime] = useState<number | null>(null);
+    const [stats, setStats] = useState<Stats[]>([
+        { id: 1, name: 'Build time', stat: `${serverFetchTime}ms` }
+    ]);
+
+// Stats logic
+    useEffect(() => {
+        setLoadingStartTime(performance.now());
+        // We're using Image object to independently track when each image has loaded
+        products.forEach((product) => {
+            const img = new Image();
+            img.src = product.ModifiedImageURL as string;
+            img.onload = handleImageLoaded;
+            img.onerror = handleImageError; // Håndter fejl ved indlæsning
+        });
+    }, [products]);
 
     const handleImageLoaded = () => {
-        setImagesLoaded(prev =>  prev + 1);
+        imagesLoaded.current += 1;
+        updateImageStat();
     };
 
-    // To be sure we're starting fresh on each render
-    useEffect(() => {
-        return () => {
-            setStats([]);
-        };
-    }, []);
+    const handleImageError = () => {
+        console.error('Fejl ved indlæsning af billede');
+    };
 
-    useEffect(() => {
-        if (imagesLoaded === products.length && loadingStartTime) {
+    const updateImageStat = () => {
+        if (imagesLoaded.current === products.length && loadingStartTime) {
             const loadingEndTime = performance.now();
             const loadingTime = loadingEndTime - loadingStartTime;
-            setStats([
-                { id: 1, name: 'Server-side fetching time', stat: `${serverFetchTime}ms` },
+            setStats(prevStats => [
+                ...prevStats.filter(stat => stat.id !== 2),
                 { id: 2, name: 'Images loading time', stat: `${loadingTime.toFixed(2)}ms` }
             ]);
         } else {
-            setStats([
-                { id: 1, name: 'Server-side fetching time', stat: `${serverFetchTime}ms` },
-                { id: 2, name: 'Images Loaded', stat: `${imagesLoaded} of ${products.length}` }
+            setStats(prevStats => [
+                ...prevStats.filter(stat => stat.id !== 2),
+                { id: 2, name: 'Images Loaded', stat: `${imagesLoaded.current} of ${products.length}` }
             ]);
         }
-    }, [imagesLoaded, products.length, loadingStartTime, serverFetchTime]);
+    };
+
+    useEffect(() => {
+        setLoadingStartTime(performance.now());
+    }, []);
+
+    useEffect(() => {
+        setStats(prevStats => [
+            ...prevStats.filter(stat => stat.id !== 1),
+            { id: 1, name: 'Server fetch time', stat: `${serverFetchTime}ms` }
+        ]);
+    }, [products.length, loadingStartTime, serverFetchTime]);
 
     return (
         <div className="bg-white">
@@ -141,7 +162,6 @@ export default function SSRMethodTesting({ products, serverFetchTime }: SSRMetho
                                                 src={product.ModifiedImageURL}
                                                 fetchPriority='high'
                                                 alt={product.ProductTitle}
-                                                onLoad={handleImageLoaded}
                                                 className="h-full w-full object-cover object-center sm:h-full sm:w-full"
                                             />
                                         </div>

@@ -1,4 +1,6 @@
+// pages/static-generation-method.tsx
 import React, {useEffect, useRef, useState} from 'react';
+import { GetStaticProps } from 'next';
 import AWS from 'aws-sdk';
 
 type Product = {
@@ -21,42 +23,55 @@ type Stats = {
     stat: string;
 }
 
-export default function FetchMethodTesting() {
-    const [products, setProducts] = useState<Product[]>([]);
-    const imagesLoaded = useRef(0);
-    const [loadingStartTime, setLoadingStartTime] = useState<number | null>(null);
-    const [stats, setStats] = useState<Stats[]>([]);
+type StaticGenerationMethodProps = {
+    products: Product[];
+}
 
-    const fetchProductsFromS3 = async () => {
-        const s3 = new AWS.S3();
-        const params = {
-            Bucket: 'bachelor-test-product-bucket',
-            Key: 'product-data.json'
-        };
+export const getStaticProps: GetStaticProps = async () => {
+    const start = performance.now();
 
-        const start = performance.now();
-
-        try {
-            const response = await s3.getObject(params).promise();
-
-            if (response.Body) {
-                const bodyContent = response.Body.toString('utf-8');
-                const fetchedProducts: Product[] = JSON.parse(bodyContent);
-                setProducts(fetchedProducts.slice(0, 1000).map(product => ({
-                    ...product,
-                    // We're adding a random number to the image URL to avoid caching, so we can test the loading time independently
-                    ModifiedImageURL: `${product.ImageURL}?v=${Math.floor(Math.random() * 1000)}`
-                })));
-            }
-
-            const end = performance.now();
-            setStats([{ id: 1, name: 'Fetching products time', stat: `${(end - start).toFixed(2)}ms` }]);
-        } catch (err) {
-            console.error('Error fetching products:', err);
-        }
+    const s3 = new AWS.S3();
+    const params = {
+        Bucket: 'bachelor-test-product-bucket',
+        Key: 'product-data.json'
     };
 
-    // Stats logic
+    try {
+        const response = await s3.getObject(params).promise();
+        let products: Product[] = [];
+
+        if (response.Body) {
+            const bodyContent = response.Body.toString('utf-8');
+            products = JSON.parse(bodyContent).map((product: Product) => ({
+                ...product,
+                ModifiedImageURL: `${product.ImageURL}?v=${Math.floor(Math.random() * 1000)}`
+            })).slice(0, 1000);
+        }
+
+        const end = performance.now();
+        const buildTime = end - start;
+
+        return {
+            props: {
+                products,
+                buildTime: buildTime.toFixed(2)
+            },
+            revalidate: 10
+        };
+    } catch (err) {
+        console.error('Error fetching products:', err);
+        return { props: { products: [], buildTime: 0 } };
+    }
+}
+
+export default function StaticGenerationMethod({ products, buildTime }: StaticGenerationMethodProps & { buildTime: number }) {
+    const imagesLoaded = useRef(0);
+    const [loadingStartTime, setLoadingStartTime] = useState<number | null>(null);
+    const [stats, setStats] = useState<Stats[]>([
+        { id: 1, name: 'Build time', stat: `${buildTime}ms` }
+    ]);
+
+// Stats logic
     useEffect(() => {
         setLoadingStartTime(performance.now());
         // We're using Image object to independently track when each image has loaded
@@ -95,8 +110,14 @@ export default function FetchMethodTesting() {
 
     useEffect(() => {
         setLoadingStartTime(performance.now());
-        fetchProductsFromS3().then(() => console.log('Products fetched'))
     }, []);
+
+    useEffect(() => {
+        setStats(prevStats => [
+            ...prevStats.filter(stat => stat.id !== 1),
+            { id: 1, name: 'Build time', stat: `${buildTime}ms` }
+        ]);
+    }, [products.length, loadingStartTime, buildTime]);
 
     return (
         <div className="bg-white">
@@ -104,10 +125,11 @@ export default function FetchMethodTesting() {
                 <main className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
                     <div className="border-b border-gray-200 pb-10 pt-24">
                         <h4>Husk at genopfriske sitet</h4>
-                        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Fetch rendering method</h1>
+                        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Static Site Generation Method</h1>
                         <p className="mt-4 text-base text-gray-500">
-                            Client-side fetch anvender browserens native fetch API til at anmode om og modtage data efter siden er indlæst. Denne metode er nyttig for dynamisk indhold, der kræver opdateringer efter brugerinteraktioner, men kan have indflydelse på initial loadtid og SEO.
+                            Static Site Generation (SSG) er en metode, hvor sider genereres på byggetidspunktet. Dette betyder, at alle brugere får serveret den samme statiske fil, hvilket kan resultere i hurtigere loadtider og bedre SEO, da indholdet er klar, når søgemaskiner crawler siden. Det er især effektivt for indhold, der ikke ændrer sig ofte, men kan også understøtte dynamiske data gennem inkrementel regenerering.
                         </p>
+
                     </div>
                     <div>
                         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -136,8 +158,8 @@ export default function FetchMethodTesting() {
                                             {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img
                                                 src={product.ModifiedImageURL}
-                                                alt={product.ProductTitle}
                                                 fetchPriority='high'
+                                                alt={product.ProductTitle}
                                                 className="h-full w-full object-cover object-center sm:h-full sm:w-full"
                                             />
                                         </div>
@@ -161,5 +183,5 @@ export default function FetchMethodTesting() {
                 </main>
             </div>
         </div>
-    )
+    );
 }
