@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {Bars3Icon} from "@heroicons/react/24/outline";
-import { Page } from "../../../types/Page";
+import {Page} from '@/types/Page'
 import logo from "../../../public/logo.webp";
 import Image from "next/image";
 

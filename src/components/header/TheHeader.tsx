@@ -5,7 +5,7 @@ import DesktopNavigation from "@/components/header/DesktopNavigation";
 const navigation = {
     pages: [
         { name: 'Fetch', href: '/testing/fetch' },
-        { name: 'Static Generation', href: '#' },
+        { name: 'Static Generation', href: '/testing/ssg' },
         { name: 'SSR', href: '/testing/ssr' },
         { name: 'SSR + hydration', href: '#' },
         { name: 'ISR', href: '#' },

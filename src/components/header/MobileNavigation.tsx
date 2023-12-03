@@ -2,7 +2,7 @@ import {Dialog, Transition} from "@headlessui/react";
 import {Fragment} from "react";
 import {XMarkIcon} from "@heroicons/react/24/outline";
 import Link from 'next/link'
-import {Page} from "../../../types/Page";
+import {Page} from '@/types/Page'
 
 type MobileNavigationProps = {
     pages: Page[]
