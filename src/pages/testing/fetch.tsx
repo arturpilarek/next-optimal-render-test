@@ -1,5 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
-import AWS from 'aws-sdk';
+import {useEffect, useState} from 'react';
 import ProductList from "@/components/category/ProductList";
 import StatsBar from "@/components/category/StatsBar";
 import { Product } from '@/types/Product';
