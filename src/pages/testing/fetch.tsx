@@ -9,26 +9,19 @@ export default function FetchMethodTesting() {
     const [fetchTime, setFetchTime] = useState<number | null>(null);
 
     const fetchProductsFromS3 = async () => {
-        const s3 = new AWS.S3();
-        const params = {
-            Bucket: 'bachelor-test-product-bucket',
-            Key: 'product-data.json'
-        };
 
+        const apiURL = process.env.NEXT_PUBLIC_AWS_API_ENDPOINT;
         const start = performance.now();
 
         try {
-            const response = await s3.getObject(params).promise();
+            const response = await fetch(apiURL as string);
+            const { body } = await response.json();
+            const fetchedProducts: Product[] = JSON.parse(body);
 
-            if (response.Body) {
-                const bodyContent = response.Body.toString('utf-8');
-                const fetchedProducts: Product[] = JSON.parse(bodyContent);
-                setProducts(fetchedProducts.slice(0, 1000).map(product => ({
-                    ...product,
-                    // We're adding a random number to the image URL to avoid caching, so we can test the loading time independently
-                    ModifiedImageURL: `${product.ImageURL}?v=${Math.floor(Math.random() * 1000)}`
-                })));
-            }
+            setProducts(fetchedProducts.slice(0, 1000).map(product => ({
+                ...product,
+                ModifiedImageURL: `${product.ImageURL}?v=${Math.floor(Math.random() * 1000)}`
+            })));
 
             const end = performance.now();
             setFetchTime(end - start);

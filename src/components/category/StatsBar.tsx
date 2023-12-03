@@ -11,9 +11,12 @@ type StatsProps = {
     const [stats, setStats] = useState<Stat[]>([{ id: 1, name: loadingTimeName, stat: 'Måler...' }]);
     const imagesLoaded = useRef(0);
     const imageLoadingStartTime = useRef<number | null>(null);
+    const loadingInitiated = useRef(false);
 
     useEffect(() => {
-        if (products.length > 0) {
+        if (products.length > 0 && !loadingInitiated.current) {
+            //  Loding initiated ref var nødvendig for at undgå at useEffect kører flere gange
+            loadingInitiated.current = true;
             imageLoadingStartTime.current = performance.now();
             imagesLoaded.current = 0;
 
@@ -25,15 +28,14 @@ type StatsProps = {
             });
         }
     }, [products]);
-
     const handleImageLoaded = () => {
         imagesLoaded.current += 1;
         if (imagesLoaded.current === products.length && imageLoadingStartTime.current) {
             const imageLoadingEndTime = performance.now();
-            const imageLoadingTime = imageLoadingEndTime - imageLoadingStartTime.current;
+            const imageLoadingTime = (imageLoadingEndTime - imageLoadingStartTime.current) / 1000
             setStats(prevStats => [
                 ...prevStats.filter(stat => stat.id !== 2),
-                { id: 2, name: 'Images loading time', stat: `${imageLoadingTime.toFixed(2)}ms` }
+                { id: 2, name: 'Images loading time', stat: `${imageLoadingTime.toFixed(2)}s` }
             ]);
         } else {
             setStats(prevStats => [

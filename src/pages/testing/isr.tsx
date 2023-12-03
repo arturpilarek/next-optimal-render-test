@@ -29,7 +29,9 @@ export const getStaticProps: GetStaticProps = async () => {
             props: {
                 products: updatedProducts,
                 buildTime: buildTime.toFixed(2)
-            }
+            },
+            // genopfrisk siden hvert 10. sekund
+            revalidate: 10
         };
     } catch (err) {
         console.error('Error fetching products:', err);
@@ -37,7 +39,7 @@ export const getStaticProps: GetStaticProps = async () => {
     }
 }
 
-export default function StaticGenerationMethod({ products, buildTime }: StaticGenerationMethodProps & { buildTime: number }) {
+export default function IncrementalStaticGenerationMethod({ products, buildTime }: StaticGenerationMethodProps & { buildTime: number }) {
 
     return (
         <div className="bg-white">

@@ -1,5 +1,6 @@
 import TheHeader from "@/components/header/TheHeader";
 import TheFooter from "@/components/footer/TheFooter";
+import React from "react";
 
 type MainLayoutProps = {
     children: React.ReactNode

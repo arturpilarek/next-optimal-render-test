@@ -1,6 +1,3 @@
-// pages/ssr-method.tsx
-import React, {useEffect, useRef, useState} from 'react';
-import AWS from 'aws-sdk';
 import { GetServerSideProps } from 'next';
 import StatsBar from "@/components/category/StatsBar";
 import { Product } from '@/types/Product';
@@ -14,33 +11,24 @@ type SSRMethodTestingProps = {
 export const getServerSideProps: GetServerSideProps = async () => {
     const start = performance.now();
 
-    const s3 = new AWS.S3();
-    const params = {
-        Bucket: 'bachelor-test-product-bucket',
-        Key: 'product-data.json'
-    };
+    const apiURL = process.env.NEXT_PUBLIC_AWS_API_ENDPOINT;
 
     try {
-        const response = await s3.getObject(params).promise();
+        const response = await fetch(apiURL as string);
+        const { body } = await response.json();
+        const fetchedProducts: Product[] = JSON.parse(body);
+
+        const updatedProducts = fetchedProducts.map(product => ({
+            ...product,
+            ModifiedImageURL: `${product.ImageURL}?v=${Math.floor(Math.random() * 1000)}`
+        }));
 
         const end = performance.now();
         const fetchTime = end - start;
 
-        let products: Product[] = [];
-
-        if (response.Body) {
-            const bodyContent = response.Body.toString('utf-8');
-            const fetchedProducts: Product[] = JSON.parse(bodyContent);
-            const updatedProducts = fetchedProducts.map(product => ({
-                ...product,
-                ModifiedImageURL: `${product.ImageURL}?v=${Math.floor(Math.random() * 1000)}`
-            }));
-            products = updatedProducts.slice(0, 1000);
-        }
-
         return {
             props: {
-                products,
+                products: updatedProducts,
                 serverFetchTime: fetchTime.toFixed(2)
             }
         };
