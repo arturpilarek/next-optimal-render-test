@@ -8,10 +8,11 @@ type StatsProps = {
     loadingTimeName: string;
 };
     export default function StatsBar({ products, loadingTime, loadingTimeName = 'Render time' }: StatsProps) {
-    const [stats, setStats] = useState<Stat[]>([{ id: 1, name: loadingTimeName, stat: 'Måler...' }]);
+    const [stats, setStats] = useState<Stat[]>([{ id: 1, name: loadingTimeName, stat: 'Måler...' },{ id: 3, name: 'Total rendering time', stat: 'Måler...' }]);
     const imagesLoaded = useRef(0);
     const imageLoadingStartTime = useRef<number | null>(null);
     const loadingInitiated = useRef(false);
+
 
     useEffect(() => {
         if (products.length > 0 && !loadingInitiated.current) {
@@ -22,7 +23,7 @@ type StatsProps = {
 
             products.forEach(product => {
                 const img = new Image();
-                img.src = product.ModifiedImageURL as string;
+                img.src = product.ImageURL as string;
                 img.onload = handleImageLoaded;
                 img.onerror = () => console.error('Fejl ved indlæsning af billede');
             });
@@ -34,8 +35,9 @@ type StatsProps = {
             const imageLoadingEndTime = performance.now();
             const imageLoadingTime = (imageLoadingEndTime - imageLoadingStartTime.current) / 1000
             setStats(prevStats => [
-                ...prevStats.filter(stat => stat.id !== 2),
-                { id: 2, name: 'Images loading time', stat: `${imageLoadingTime.toFixed(2)}s` }
+                ...prevStats.filter(stat => stat.id !== 2 && stat.id !== 3),
+                { id: 2, name: 'Images Loaded', stat: `${imagesLoaded.current} of ${products.length}` },
+                { id: 3, name: 'Total rendering time', stat: `${imageLoadingTime.toFixed(2)}s` }
             ]);
         } else {
             setStats(prevStats => [

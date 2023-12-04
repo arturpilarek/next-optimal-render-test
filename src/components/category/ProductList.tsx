@@ -22,7 +22,7 @@ export default function ProductList({ products }: ProductListProps) {
                         <div className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
-                                src={product.ModifiedImageURL}
+                                src={product.ImageURL}
                                 alt={product.ProductTitle}
                                 fetchPriority='high'
                                 className="h-full w-full object-cover object-center sm:h-full sm:w-full"

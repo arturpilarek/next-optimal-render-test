@@ -17,17 +17,12 @@ export const getStaticProps: GetStaticProps = async () => {
         const { body } = await response.json();
         const fetchedProducts: Product[] = JSON.parse(body);
 
-        const updatedProducts = fetchedProducts.map(product => ({
-            ...product,
-            ModifiedImageURL: `${product.ImageURL}?v=${Math.floor(Math.random() * 1000)}`
-        }))
-
         const end = performance.now();
         const buildTime = end - start;
 
         return {
             props: {
-                products: updatedProducts,
+                products: fetchedProducts,
                 buildTime: buildTime.toFixed(2)
             }
         };

@@ -9,5 +9,4 @@ export type Product = {
     ProductTitle: string;
     Image: string;
     ImageURL: string;
-    ModifiedImageURL?: string;
 }

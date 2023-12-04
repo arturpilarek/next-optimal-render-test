@@ -7,7 +7,7 @@ export default function FetchMethodTesting() {
     const [products, setProducts] = useState<Product[]>([]);
     const [fetchTime, setFetchTime] = useState<number | null>(null);
 
-    const fetchProductsFromS3 = async () => {
+    const fetchProductFromAWS = async () => {
 
         const apiURL = process.env.NEXT_PUBLIC_AWS_API_ENDPOINT;
         const start = performance.now();
@@ -17,10 +17,7 @@ export default function FetchMethodTesting() {
             const { body } = await response.json();
             const fetchedProducts: Product[] = JSON.parse(body);
 
-            setProducts(fetchedProducts.slice(0, 1000).map(product => ({
-                ...product,
-                ModifiedImageURL: `${product.ImageURL}?v=${Math.floor(Math.random() * 1000)}`
-            })));
+            setProducts(fetchedProducts);
 
             const end = performance.now();
             setFetchTime(end - start);
@@ -30,7 +27,7 @@ export default function FetchMethodTesting() {
     };
 
     useEffect(() => {
-        fetchProductsFromS3().then(() => console.log('Products fetched'))
+        fetchProductFromAWS().then(() => console.log('Products fetched'))
     }, []);
 
     return (
