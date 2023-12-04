@@ -20,7 +20,7 @@ const nextConfig = {
     AWS_API_ENDPOINT: process.env.NEXT_PUBLIC_AWS_API_ENDPOINT
   },
   images: {
-    domains: ['images.unsplash.com', 'static.thenounproject.com'],
+    domains: ['images.unsplash.com', 'static.thenounproject.com', 'assets.myntassets.com'],
   }
 }
 

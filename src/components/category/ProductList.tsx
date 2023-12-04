@@ -23,6 +23,8 @@ export default function ProductList({ products }: ProductListProps) {
                             <Image
                                 src={product.ImageURL}
                                 alt={product.ProductTitle}
+                                width={306}
+                                height={384}
                                 fetchPriority='high'
                                 className="h-full w-full object-cover object-center sm:h-full sm:w-full"
                             />
