@@ -46,9 +46,9 @@ export default function SSRMethodTesting({ products, serverFetchTime }: SSRMetho
                 <main className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
                     <div className="border-b border-gray-200 pb-10 pt-24">
                         <h4>Husk at genopfriske sitet</h4>
-                        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Fetch rendering method</h1>
+                        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Server-Side Rendering Method</h1>
                         <p className="mt-4 text-base text-gray-500">
-                            Client-side fetch anvender browserens native fetch API til at anmode om og modtage data efter siden er indlæst. Denne metode er nyttig for dynamisk indhold, der kræver opdateringer efter brugerinteraktioner, men kan have indflydelse på initial loadtid og SEO.
+                            Server-Side Rendering (SSR) i Next.js genererer hver side dynamisk ved serveranmodning, hvilket sikrer aktuelt indhold og stærk SEO. SSR er ideelt til sider, der kræver hyppige opdateringer eller har bruger-specifikt indhold.
                         </p>
                     </div>
                     <div>

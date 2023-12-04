@@ -4,11 +4,12 @@ import MobileNavigation from "@/components/header/MobileNavigation";
 import DesktopNavigation from "@/components/header/DesktopNavigation";
 const navigation = {
     pages: [
-        { name: 'Fetch', href: '/testing/fetch' },
-        { name: 'Static Generation', href: '/testing/ssg' },
+        { name: 'CSR', href: '/testing/fetch' },
         { name: 'SSR', href: '/testing/ssr' },
+        { name: 'Static Generation', href: '/testing/ssg' },
         { name: 'ISR', href: '/testing/isr' },
-        { name: 'Dynamic Import med CSR', href: '#' },
+        // { name: 'Dynamic Import med CSR', href: '#' },
+        { name: 'ISR + hydration + SWR', href: '#' },
         { name: 'Graphql Queries', href: '#' },
     ],
 }

@@ -47,11 +47,10 @@ export default function IncrementalStaticGenerationMethod({ products, buildTime 
                 <main className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
                     <div className="border-b border-gray-200 pb-10 pt-24">
                         <h4>Husk at genopfriske sitet</h4>
-                        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Static Site Generation Method</h1>
+                        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Incremental Static Regeneration Method</h1>
                         <p className="mt-4 text-base text-gray-500">
-                            Static Site Generation (SSG) er en metode, hvor sider genereres på byggetidspunktet. Dette betyder, at alle brugere får serveret den samme statiske fil, hvilket kan resultere i hurtigere loadtider og bedre SEO, da indholdet er klar, når søgemaskiner crawler siden. Det er især effektivt for indhold, der ikke ændrer sig ofte, men kan også understøtte dynamiske data gennem inkrementel regenerering.
+                            Incremental Static Regeneration (ISR) i Next.js kombinerer hurtige loadtider fra statisk generering med dynamisk indholdsopdatering. Det er ideelt for sider, der kræver regelmæssige opdateringer, uden behov for hyppige fulde genopbygninger.
                         </p>
-
                     </div>
                     <div>
                         <StatsBar products={products} loadingTime={buildTime} loadingTimeName={'Build time'} />
