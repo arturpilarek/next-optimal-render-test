@@ -1,5 +1,5 @@
 import {Product} from "@/types/Product";
-import React from "react";
+import Image from "next/image";
 
 type ProductListProps = {
     products: Product[];
@@ -20,8 +20,7 @@ export default function ProductList({ products }: ProductListProps) {
                         className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
                     >
                         <div className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
+                            <Image
                                 src={product.ImageURL}
                                 alt={product.ProductTitle}
                                 fetchPriority='high'
