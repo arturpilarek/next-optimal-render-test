@@ -44,8 +44,9 @@ type StatsProps = {
             ]);
         } else {
             setStats(prevStats => [
-                ...prevStats.filter(stat => stat.id !== 3),
-                { id: 3, name: 'Images Loaded', stat: `${imagesLoaded.current} of ${products.length}` }
+                ...prevStats.filter(stat => stat.id !== 3 && stat.id !== 4),
+                { id: 3, name: 'Images Loaded', stat: `${imagesLoaded.current} of ${products.length}` },
+                { id: 4, name: 'Total rendering time', stat: `Måler...` }
             ]);
         }
     };
