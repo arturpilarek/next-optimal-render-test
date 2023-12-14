@@ -1,8 +1,9 @@
 import {Dialog, Transition} from "@headlessui/react";
-import {Fragment} from "react";
+import {Fragment, useEffect, useRef} from "react";
 import {XMarkIcon} from "@heroicons/react/24/outline";
 import Link from 'next/link'
 import {Page} from '@/types/Page'
+import {useRouter} from "next/router";
 
 type MobileNavigationProps = {
     pages: Page[]
@@ -13,8 +14,18 @@ type MobileNavigationProps = {
 export default function MobileNavigation({ pages, openState, changeOpenState }: MobileNavigationProps) {
 
     const doChangeOpenState = () => {
-        changeOpenState(!openState)
+        if (openState) {
+            changeOpenState(false);
+        }
     }
+
+    const router = useRouter();
+
+    useEffect(() => {
+        if (openState) {
+            doChangeOpenState();
+        }
+    }, [router.route]);
 
     return (
             <Transition.Root show={openState} as={Fragment}>
@@ -65,9 +76,16 @@ export default function MobileNavigation({ pages, openState, changeOpenState }: 
 
                                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                                         <div  className="flow-root">
-                                            <Link href="/about" className="-m-2 block p-2 font-medium text-gray-900">
-                                                Om projektet
-                                            </Link>
+                                            {router.route !== "/" && (
+                                                <Link href="/" className="-m-2 block p-2 font-medium text-gray-900">
+                                                    Home
+                                                </Link>
+                                            )}
+                                            {router.route !== "/about" && (
+                                                <Link href="/about" className="-m-2 block p-2 font-medium text-gray-900">
+                                                    Om projektet
+                                                </Link>
+                                            )}
                                         </div>
                                 </div>
                             </Dialog.Panel>
