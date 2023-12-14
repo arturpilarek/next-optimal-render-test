@@ -1,84 +1,25 @@
-const values = [
-    {
-        name: 'Be world-class',
-        description:
-            'Aut illo quae. Ut et harum ea animi natus. Culpa maiores et sed sint et magnam exercitationem quia. Ullam voluptas nihil vitae dicta molestiae et. Aliquid velit porro vero.',
-    },
-    {
-        name: 'Share everything you know',
-        description:
-            'Mollitia delectus a omnis. Quae velit aliquid. Qui nulla maxime adipisci illo id molestiae. Cumque cum ut minus rerum architecto magnam consequatur. Quia quaerat minima.',
-    },
-    {
-        name: 'Always learning',
-        description:
-            'Aut repellendus et officiis dolor possimus. Deserunt velit quasi sunt fuga error labore quia ipsum. Commodi autem voluptatem nam. Quos voluptatem totam.',
-    },
-    {
-        name: 'Be supportive',
-        description:
-            'Magnam provident veritatis odit. Vitae eligendi repellat non. Eum fugit impedit veritatis ducimus. Non qui aspernatur laudantium modi. Praesentium rerum error deserunt harum.',
-    },
-    {
-        name: 'Take responsibility',
-        description:
-            'Sit minus expedita quam in ullam molestiae dignissimos in harum. Tenetur dolorem iure. Non nesciunt dolorem veniam necessitatibus laboriosam voluptas perspiciatis error.',
-    },
-    {
-        name: 'Enjoy downtime',
-        description:
-            'Ipsa in earum deserunt aut. Quos minus aut animi et soluta. Ipsum dicta ut quia eius. Possimus reprehenderit iste aspernatur ut est velit consequatur distinctio.',
-    },
-]
+import SectionsLinks from "@/components/home/SectionsLinks";
+import Image from 'next/image';
+
 export default function About() {
 
     return (
-            <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
-                {/* Content section */}
+            <div className="mx-auto max-w-7xl px-6 pb-16 pt-36 sm:pt-16 lg:px-8 lg:pt-32">
                 <div className="mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8">
-                        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Our mission</h2>
-                        <div className="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
+                        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Om projektet</h2>
+                        <div className="mt-6 flex flex-col-reverse gap-x-8 gap-y-20 lg:flex-row">
                             <div className="lg:w-full lg:max-w-2xl lg:flex-auto">
+                                {/* AI-inspireret indhold, tilpasset af forfatter */}
                                 <p className="text-xl leading-8 text-gray-600">
-                                    Aliquet nec orci mattis amet quisque ullamcorper neque, nibh sem. At arcu, sit dui mi, nibh dui, diam
-                                    eget aliquam. Quisque id at vitae feugiat egestas ac. Diam nulla orci at in viverra scelerisque eget.
-                                    Eleifend egestas fringilla sapien.
+                                    Dette projekt undersøger, hvordan valget af renderingsmetoder påvirker ydeevnen på e-commerce hjemmesider. Ved at sammenligne forskellige moderne renderingsmetoder, undersøges deres indflydelse på indlæsningstider og den generelle performance af kategorisider. Ifølge Baymard Institute var Cart Abandonment Rate for online shopping 70.19% i 2023. Dette høje tal kan delvist tilskrives langsomme og buggy e-commerce sites. Derfor er denne undersøgelse vigtig for at identificere effektive teknikker, der kan forbedre brugeroplevelsen og øge effektiviteten af e-commerce hjemmesider.
                                 </p>
-                                <div className="mt-10 max-w-xl text-base leading-7 text-gray-700">
-                                    <p>
-                                        Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris semper sed
-                                        amet vitae sed turpis id. Id dolor praesent donec est. Odio penatibus risus viverra tellus varius
-                                        sit neque erat velit. Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim.
-                                        Mattis mauris semper sed amet vitae sed turpis id.
-                                    </p>
-                                    <p className="mt-10">
-                                        Et vitae blandit facilisi magna lacus commodo. Vitae sapien duis odio id et. Id blandit molestie
-                                        auctor fermentum dignissim. Lacus diam tincidunt ac cursus in vel. Mauris varius vulputate et
-                                        ultrices hac adipiscing egestas. Iaculis convallis ac tempor et ut. Ac lorem vel integer orci.
-                                    </p>
-                                </div>
+                            </div>
+                            <div className="lg:w-full lg:max-w-2xl lg:flex-auto">
+                                <Image src="https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Next.js logo" width={400} height={250} className="w-full rounded-xl object-cover shadow-lg" />
                             </div>
                     </div>
                 </div>
-
-                {/* Values section */}
-                <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8">
-                    <div className="mx-auto max-w-2xl lg:mx-0">
-                        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Our values</h2>
-                        <p className="mt-6 text-lg leading-8 text-gray-600">
-                            Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum cupiditate veritatis in
-                            accusamus quisquam.
-                        </p>
-                    </div>
-                    <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 text-base leading-7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                        {values.map((value) => (
-                            <div key={value.name}>
-                                <dt className="font-semibold text-gray-900">{value.name}</dt>
-                                <dd className="mt-1 text-gray-600">{value.description}</dd>
-                            </div>
-                        ))}
-                    </dl>
-                </div>
+                <SectionsLinks />
             </div>
     )
 }

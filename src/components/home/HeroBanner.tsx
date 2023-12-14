@@ -17,10 +17,11 @@ export default function HeroBanner({}: HeroBannerProps) {
                 />
             </div>
             <div aria-hidden="true" className="absolute inset-0 bg-gray-900 opacity-50" />
+            {/* AI-inspireret indhold, tilpasset af forfatter */}
             <div className="relative mx-auto flex max-w-4xl flex-col items-center px-6 py-32 text-center sm:py-64 lg:px-0">
-                <h1 className="text-4xl font-bold tracking-tight text-white lg:text-5xl">Indflydelse af Rendering Metoder på Performance</h1>
+                <h1 className="text-4xl font-bold tracking-tight text-white lg:text-5xl">Test af forskellige renderingsmetoder</h1>
                 <p className="mt-4 text-xl text-white">
-                    Opdag, hvordan valget mellem client-side og server-side rendering påvirker ydeevnen på moderne e-commerce hjemmesider. Vi udforsker dybdegående de forskellige tilgange og deres effekt på load-tider.
+                    Udforsk, hvordan valget af renderingmetode - CSR, SSR, SSG eller ISR - påvirker indlæsning af produkter på e-commerce hjemmesider. Gennem denne test analyserer vi de forskellige tilgange og deres effekt på indlæsningstider på kategorisider.
                 </p>
                 <Link
                     href="/about"

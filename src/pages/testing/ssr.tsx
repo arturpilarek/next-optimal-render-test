@@ -33,7 +33,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
     }
 }
 
-export default function SSRMethodTesting({ products, serverFetchTime }: SSRMethodTestingProps) {
+export default function ServerSideRenderingMethod({ products, serverFetchTime }: SSRMethodTestingProps) {
+    // Dette er fordi productData er klar på clienten, når siden er loaded
+    const clientProductDataReadyTime = 0
 
     return (
         <div className="bg-white">
@@ -47,7 +49,7 @@ export default function SSRMethodTesting({ products, serverFetchTime }: SSRMetho
                         </p>
                     </div>
                     <div>
-                        <StatsBar products={products} loadingTime={serverFetchTime} loadingTimeName={'Server fetch time'} />
+                        <StatsBar products={products} loadingTime={serverFetchTime} loadingTimeName={'Server fetch time'} clientProductDataReadyTime={clientProductDataReadyTime} />
                     </div>
                     <div className="pb-24 pt-12 lg:grid lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4">
                         <ProductList products={products} />

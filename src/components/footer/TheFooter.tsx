@@ -7,7 +7,7 @@ export default function TheFooter() {
             <div className="mx-auto max-w-7xl px-6 pb-8 pt-8 lg:px-8">
                     <div>
                         <p className="text-sm leading-6 text-white">
-                            Artur Pilarek - hovedopgave 2023 - test af forskellige renering metoder
+                            Artur Pilarek - Bachelor 2023 - Test af forskellige renderingsmetoder
                         </p>
                     </div>
             </div>

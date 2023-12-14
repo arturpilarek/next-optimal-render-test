@@ -4,7 +4,8 @@ import ProductList from "@/components/category/ProductList";
 import { Product } from '@/types/Product';
 
 type StaticGenerationMethodProps = {
-    products: Product[];
+    products: Product[],
+    buildTime: number
 }
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -32,7 +33,9 @@ export const getStaticProps: GetStaticProps = async () => {
     }
 }
 
-export default function StaticGenerationMethod({ products, buildTime }: StaticGenerationMethodProps & { buildTime: number }) {
+export default function StaticGenerationMethod({ products, buildTime }: StaticGenerationMethodProps) {
+    // Dette er fordi productData er klar på clienten, når siden er loaded
+    const clientProductDataReadyTime = 0
 
     return (
         <div className="bg-white">
@@ -47,7 +50,7 @@ export default function StaticGenerationMethod({ products, buildTime }: StaticGe
 
                     </div>
                     <div>
-                        <StatsBar products={products} loadingTime={buildTime} loadingTimeName={'Build time'} />
+                        <StatsBar products={products} loadingTime={buildTime} loadingTimeName={'Build time'} clientProductDataReadyTime={clientProductDataReadyTime} />
                     </div>
                     <div className="pb-24 pt-12 lg:grid lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4">
                         <ProductList products={products} />
