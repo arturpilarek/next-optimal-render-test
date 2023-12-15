@@ -37,7 +37,7 @@ export default function ClientSideRenderingMethod() {
             <div>
                 <main className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
                     <div className="border-b border-gray-200 pb-10 pt-24">
-                        <h4>Husk at genopfriske sitet</h4>
+                        <h4>Husk at tømme cache</h4>
                         <h1 className="text-4xl font-bold tracking-tight text-gray-900">Client-side rendering method</h1>
                         <p className="mt-4 text-base text-gray-500">
                             Client-Side Rendering (CSR) betyder, at webindholdet genereres i brugerens browser ved hjælp af JavaScript. Denne tilgang henter data og opdaterer UI dynamisk, hvilket er ideelt for interaktive applikationer. CSR kan dog forlænge den oprindelige indlæsningstid og påvirke SEO, da søgemaskiner har sværere ved at indeksere indhold, der genereres klient-side.

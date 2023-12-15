@@ -2,7 +2,6 @@ import { GetStaticProps } from 'next';
 import StatsBar from "@/components/category/StatsBar";
 import ProductList from "@/components/category/ProductList";
 import { Product } from '@/types/Product';
-import {useEffect, useState} from "react";
 
 type StaticGenerationMethodProps = {
     products: Product[],
@@ -20,7 +19,7 @@ export const getStaticProps: GetStaticProps = async () => {
         const fetchedProducts: Product[] = JSON.parse(body);
 
         const end = performance.now();
-        const buildTime = end - start;
+        const buildTime = (end - start) / 1000;
 
         return {
             props: {
@@ -37,7 +36,7 @@ export const getStaticProps: GetStaticProps = async () => {
 }
 
 export default function IncrementalStaticGenerationMethod({ products, buildTime }: StaticGenerationMethodProps) {
-    // Dette er fordi productData er klar på clienten, når siden er loaded
+    // Dette er fordi productData er klar på klienten, når siden er loaded
     const clientProductDataReadyTime = 0
 
 
@@ -46,7 +45,7 @@ export default function IncrementalStaticGenerationMethod({ products, buildTime 
             <div>
                 <main className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
                     <div className="border-b border-gray-200 pb-10 pt-24">
-                        <h4>Husk at genopfriske sitet</h4>
+                        <h4>Husk at tømme cache</h4>
                         <h1 className="text-4xl font-bold tracking-tight text-gray-900">Incremental Static Regeneration Method</h1>
                         <p className="mt-4 text-base text-gray-500">
                             Incremental Static Regeneration (ISR) i Next.js kombinerer hurtige loadtider fra statisk generering med dynamisk indholdsopdatering. Det er ideelt for sider, der kræver regelmæssige opdateringer, uden behov for hyppige fulde genopbygninger.
